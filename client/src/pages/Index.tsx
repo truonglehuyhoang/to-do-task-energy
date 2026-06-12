@@ -224,7 +224,7 @@ const Index = () => {
           <div className="flex items-center gap-3">
             <Zap className="h-7 w-7 text-primary animate-pulse-glow rounded-full" />
             <h1 className="font-display text-2xl font-bold tracking-widest text-foreground">
-              ENERGY PLANNER
+              TASKAMINA: ENERGY-BASED TASK PLANNER
             </h1>
           </div>
 
