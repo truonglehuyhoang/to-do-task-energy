@@ -22,8 +22,15 @@ const AddTaskForm = ({ energy, onAdd, onPreviewCostChange }: AddTaskFormProps) =
   const [duration, setDuration] = useState("60");
   const [intensity, setIntensity] = useState<"light" | "medium" | "heavy">("medium");
   const [preview, setPreview] = useState<{ cost: number; risk: string } | null>(null);
+  const isTaskNAmeValid = name.trim().length > 0;
 
   const handlePreview = () => {
+    if(!isTaskNAmeValid){
+      setPreview(null);
+      onPreviewCostChange(0);
+      return;
+    }
+
     const cost = calcCost(Number(duration), intensity);
     const risk = calcRisk(cost, intensity, energy);
     setPreview({ cost, risk });
@@ -64,7 +71,14 @@ const AddTaskForm = ({ energy, onAdd, onPreviewCostChange }: AddTaskFormProps) =
       <Input
         placeholder="Task name..."
         value={name}
-        onChange={(e) => setName(e.target.value)}
+        onChange={(e) => {
+          setName(e.target.value);
+          
+          if(!e.target.value.trim()){
+            setPreview(null);
+            onPreviewCostChange(0);
+          }
+        }} 
         className="bg-muted border-border text-foreground placeholder:text-muted-foreground"
       />
 
@@ -111,10 +125,17 @@ const AddTaskForm = ({ energy, onAdd, onPreviewCostChange }: AddTaskFormProps) =
       )}
 
       <div className="grid grid-cols-2 gap-3">
-        <Button variant="outline" onClick={handlePreview} className="border-border text-foreground hover:bg-muted">
+        <Button 
+          variant="outline" 
+          onClick={handlePreview} 
+          disabled={!isTaskNAmeValid}
+          className="border-border text-foreground hover:bg-muted">
           <Eye className="mr-2 h-4 w-4" /> Preview
         </Button>
-        <Button onClick={handleAdd} className="bg-primary text-primary-foreground hover:bg-primary/90">
+        <Button 
+          onClick={handleAdd} 
+          disabled={!isTaskNAmeValid}
+          className="bg-primary text-primary-foreground hover:bg-primary/90">
           <Plus className="mr-2 h-4 w-4" /> Add Task
         </Button>
       </div>
